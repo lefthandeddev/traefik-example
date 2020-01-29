@@ -10,7 +10,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./traefik.toml:/traefik.toml
     labels:
-      - "traefik.http.routers.api.rule=Host(`docker.localhost`)"
+      - "traefik.http.routers.api.rule=Host(`traefik.docker.localhost`)"
       - "traefik.http.routers.api.service=api@internal"
     restart: always
   portainer:
@@ -32,6 +32,8 @@ services:
     restart: always
   grafana:
     image: grafana/grafana
+    volumes:
+      - grafana_data:/var/lib/grafana
     labels:
       - "traefik.http.routers.grafana.rule=Host(`grafana.docker.localhost`)"
       - "traefik.http.services.grafana.loadbalancer.server.port=3000"
@@ -39,3 +41,4 @@ services:
 
 volumes:
   portainer_data:
+  grafana_data:

@@ -10,4 +10,6 @@ defaultEntryPoints = ["http"]
   [metrics.prometheus]
     entryPoint = "http"
 
+[accessLog]
+
 [providers.docker]
