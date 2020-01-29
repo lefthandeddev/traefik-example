@@ -1,0 +1,13 @@
+defaultEntryPoints = ["http"]
+
+[entryPoints]
+  [entryPoints.http]
+    address = ":80"
+
+[api]
+
+[metrics]
+  [metrics.prometheus]
+    entryPoint = "http"
+
+[providers.docker]

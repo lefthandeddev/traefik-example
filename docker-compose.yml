@@ -1,0 +1,41 @@
+version: "3.7"
+
+services:
+  traefik:
+    image: traefik
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik.toml:/traefik.toml
+    labels:
+      - "traefik.http.routers.api.rule=Host(`docker.localhost`)"
+      - "traefik.http.routers.api.service=api@internal"
+    restart: always
+  portainer:
+    image: portainer/portainer
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    labels:
+      - "traefik.http.routers.portainer.rule=Host(`portainer.docker.localhost`)"
+      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+    restart: always
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    labels:
+      - "traefik.http.routers.prometheus.rule=Host(`prometheus.docker.localhost`)"
+      - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
+    restart: always
+  grafana:
+    image: grafana/grafana
+    labels:
+      - "traefik.http.routers.grafana.rule=Host(`grafana.docker.localhost`)"
+      - "traefik.http.services.grafana.loadbalancer.server.port=3000"
+    restart: always
+
+volumes:
+  portainer_data:
