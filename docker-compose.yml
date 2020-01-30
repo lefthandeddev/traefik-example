@@ -38,7 +38,16 @@ services:
       - "traefik.http.routers.grafana.rule=Host(`grafana.docker.localhost`)"
       - "traefik.http.services.grafana.loadbalancer.server.port=3000"
     restart: always
+  rabbitmq:
+    build: ./rabbitmq
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    labels:
+      - "traefik.http.routers.rabbitmq.rule=Host(`rabbitmq.docker.localhost`)"
+      - "traefik.http.services.rabbitmq.loadbalancer.server.port=15672"
+    restart: always
 
 volumes:
   portainer_data:
   grafana_data:
+  rabbitmq_data:
